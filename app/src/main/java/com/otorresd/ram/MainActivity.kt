@@ -3,12 +3,17 @@ package com.otorresd.ram
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
@@ -20,7 +25,9 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.Icon
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Image
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,9 +65,11 @@ import com.otorresd.ram.room.entities.CharacterE
 import com.otorresd.ram.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
 import io.ktor.client.engine.android.*
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @ExperimentalAnimationApi
     @ExperimentalPagingApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_RAM)
@@ -76,37 +85,63 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalPagingApi
 @Composable
 fun CharactersListC(charactersViewModel: CharactersListViewModel = viewModel()){
+    val scope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
     val lazyPagingItems = charactersViewModel.pager.flow.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading )
 
-    SwipeRefresh(
-        state = state,
-        onRefresh = { lazyPagingItems.refresh() },
-    ) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(Background)) {
-            items(lazyPagingItems, key = { it.id }) { character ->
-                character?.let { CharacterC(character = character) } ?: CardHolderC()
-            }
+    Box {
+        SwipeRefresh(
+            state = state,
+            onRefresh = { lazyPagingItems.refresh() },
+        ) {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp),
+                state = listState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(Background)) {
+                items(lazyPagingItems, key = { it.id }) { character ->
+                    character?.let { CharacterC(character = character) } ?: CardHolderC()
+                }
 
-            lazyPagingItems.apply {
-                when {
-                    loadState.refresh is LoadState.Error -> item {
-                        NetworkConnectionError{ lazyPagingItems.refresh()}
-                    }
-                    loadState.append is LoadState.Loading -> item {
-                        AppendProgress()
-                    }
-                    loadState.append is LoadState.Error -> item {
-                        AppendRetryButton{ lazyPagingItems.retry() }
+                lazyPagingItems.apply {
+                    when {
+                        loadState.refresh is LoadState.Error -> item {
+                            NetworkConnectionError{ lazyPagingItems.refresh()}
+                        }
+                        loadState.append is LoadState.Loading -> item {
+                            AppendProgress()
+                        }
+                        loadState.append is LoadState.Error -> item {
+                            AppendRetryButton{ lazyPagingItems.retry() }
+                        }
                     }
                 }
+            }
+        }
+
+        val showButton = listState.firstVisibleItemIndex > 0
+        
+        AnimatedVisibility(
+            visible = showButton,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 20.dp, bottom = 20.dp)
+            ) {
+            FloatingActionButton(onClick = {
+                scope.launch {
+                    listState.scrollToItem(0)
+                }
+            }, contentColor = Color.White,
+            backgroundColor = TextOrange) {
+                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = "Localized description")
             }
         }
     }
