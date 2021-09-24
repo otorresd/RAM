@@ -28,6 +28,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,6 +60,7 @@ import coil.size.Scale
 import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.otorresd.ram.model.CharactersListViewModel
 import com.otorresd.ram.room.entities.CharacterE
@@ -98,6 +100,9 @@ fun CharactersListC(charactersViewModel: CharactersListViewModel = viewModel()){
         SwipeRefresh(
             state = state,
             onRefresh = { lazyPagingItems.refresh() },
+            indicator = {state, trigger ->
+                SwipeRefreshIndicator(state = state, refreshTriggerDistance = trigger, backgroundColor = TextOrange, contentColor = Color.White)
+            }
         ) {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp),
                 state = listState,
@@ -140,7 +145,9 @@ fun CharactersListC(charactersViewModel: CharactersListViewModel = viewModel()){
                     listState.scrollToItem(0)
                 }
             }, contentColor = Color.White,
-            backgroundColor = TextOrange) {
+            backgroundColor = TextOrange,
+            elevation = FloatingActionButtonDefaults.elevation(8.dp),
+            modifier = Modifier.size(40.dp)) {
                 Icon(Icons.Filled.KeyboardArrowUp, contentDescription = "Localized description")
             }
         }
@@ -215,10 +222,13 @@ fun AppendProgress(){
         verticalArrangement = Arrangement.Center) {
 
         Card(shape = RoundedCornerShape(50),
+            backgroundColor = TextOrange,
+            elevation = 8.dp,
             modifier = Modifier
                 .padding(top = 10.dp, bottom = 10.dp)
                 .align(Alignment.CenterHorizontally)) {
-            CircularProgressIndicator(color = Color.Black)
+            CircularProgressIndicator(color = Color.White, modifier = Modifier
+                .padding(5.dp))
         }
     }
 }
