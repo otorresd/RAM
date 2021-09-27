@@ -1,6 +1,5 @@
 package com.otorresd.ram.model
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
@@ -20,4 +19,6 @@ class CharactersListViewModel @Inject internal constructor(private val appDataba
     ) {
         charactersDao.pagingSource()
     }
+
+    val charactersSize = appDatabase.characterDao().countOfCharacters()
 }

@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FloatingActionButtonDefaults
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,8 +70,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.ktor.client.engine.android.*
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @ExperimentalCoilApi
     @ExperimentalAnimationApi
     @ExperimentalPagingApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +90,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalCoilApi
 @ExperimentalAnimationApi
 @ExperimentalPagingApi
 @Composable
@@ -95,7 +99,7 @@ fun CharactersListC(charactersViewModel: CharactersListViewModel = viewModel()){
     val listState = rememberLazyListState()
     val lazyPagingItems = charactersViewModel.pager.flow.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading )
-
+    val items by charactersViewModel.charactersSize.collectAsState(initial = 0)
     Box {
         SwipeRefresh(
             state = state,
@@ -117,7 +121,10 @@ fun CharactersListC(charactersViewModel: CharactersListViewModel = viewModel()){
                 lazyPagingItems.apply {
                     when {
                         loadState.refresh is LoadState.Error -> item {
-                            NetworkConnectionError{ lazyPagingItems.refresh()}
+                            if (items == 0)
+                                NetworkConnectionError{ lazyPagingItems.refresh()}
+                            else
+                                AppendRetryButton{ lazyPagingItems.retry() }
                         }
                         loadState.append is LoadState.Loading -> item {
                             AppendProgress()
@@ -174,8 +181,10 @@ fun CardHolderC() {
     }
 }
 
+@ExperimentalCoilApi
 @Composable
 fun CharacterC(character: CharacterE) {
+    var errorImage by remember { mutableStateOf(false) }
     Card(modifier = Modifier
         .fillMaxWidth()
         .height(250.dp)
@@ -186,15 +195,51 @@ fun CharacterC(character: CharacterE) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {
-        Image(painter = rememberImagePainter(character.image,
-                builder = {
-                    placeholder(R.drawable.ic_placeholder)
-                    transformations(RoundedCornersTransformation())
-                }),
-                contentDescription = "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight())
+            if (!errorImage){
+                var image = rememberImagePainter(character.image,
+                    builder = {
+                        placeholder(R.drawable.ic_placeholder)
+                        error(R.drawable.ic_placeholder)
+                        transformations(RoundedCornersTransformation())
+                    },
+                )
+
+                Image(painter = image,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight())
+
+                when (image.state) {
+                    is ImagePainter.State.Loading -> {
+                        // Display a circular progress indicator whilst loading
+                        CircularProgressIndicator(color = TextOrange, modifier = Modifier
+                            .align(Alignment.Center))
+                    }
+                    is ImagePainter.State.Error -> {
+                        // If you wish to display some content if the request fails
+                        errorImage = true
+                    }
+                    else -> {}
+                }
+            }else{
+                Image(painter = painterResource(id = R.drawable.ic_placeholder),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight())
+
+                FloatingActionButton(onClick = {
+                    errorImage = false
+                }, contentColor = Color.White,
+                    backgroundColor = TextOrange,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .align(Alignment.Center)) {
+                    Icon(Icons.Rounded.Refresh, contentDescription = "")
+                }
+            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

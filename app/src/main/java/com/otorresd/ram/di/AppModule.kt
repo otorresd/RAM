@@ -10,7 +10,11 @@ import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
+import java.security.SecureRandom
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSession
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,6 +36,10 @@ object AppModule {
             engine {
                 config {
                     followRedirects(false)
+                    hostnameVerifier { _: String?, _: SSLSession? -> true }
+                    readTimeout(30, TimeUnit.SECONDS)
+                    connectTimeout(30, TimeUnit.SECONDS)
+                    writeTimeout(30, TimeUnit.SECONDS)
                 }
             }
             install(JsonFeature) {
