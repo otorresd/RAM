@@ -9,10 +9,22 @@ data class Paging(val info: Info, val results: List<Character>) {
     }
 }
 
-data class Character(val id: Int, val name: String, val image: String){
+data class Character(val id: Int,
+                     val name: String,
+                     val image: String,
+                     val status: String,
+                     val species: String,
+                     val type: String,
+                     val gender: String){
 
     fun toCharacterE(): CharacterE{
-        return CharacterE(id = id, name = name, image = image)
+        return CharacterE(id = id,
+            name = name,
+            image = image,
+            status = status,
+            species = species,
+            type = type,
+            gender = gender)
     }
 }
 
