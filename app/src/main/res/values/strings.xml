@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RAM</string>
+    <string name="title_activity_character_detail">CharacterDetailActivity</string>
 </resources>

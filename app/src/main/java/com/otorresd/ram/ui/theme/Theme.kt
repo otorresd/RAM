@@ -20,7 +20,6 @@ private val LightColorPalette = lightColors(
     secondary = Teal200,
     background = Background,
     onPrimary = Background
-
 )
 
 @Composable

@@ -22,6 +22,9 @@ interface CharactersDao {
     @Query("SELECT COUNT(DISTINCT id)  FROM characters")
     fun countOfCharacters(): Flow<Int>
 
+    @Query("SELECT *  FROM characters WHERE id LIKE :id")
+    fun getCharacterById(id: String): Flow<CharacterE>
+
     @Query("DELETE FROM characters")
     suspend fun clearAll()
 }
