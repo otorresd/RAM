@@ -267,20 +267,27 @@ fun AppendRetryButton(retryAction: () -> Unit){
     }
 }
 
+@ExperimentalCoilApi
 @Composable
 fun NetworkConnectionError(retryAction: () -> Unit){
     Column(modifier = Modifier
         .height(LocalConfiguration.current.screenHeightDp.dp)
         .fillMaxWidth(),
         verticalArrangement = Arrangement.Center) {
+        val image = rememberImagePainter(R.drawable.morty_sun, LocalContext.current.imageLoader)
+        Image(painter = image,
+            contentDescription = "",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp))
         Text(text = "Oops! Please connect your device to Internet",
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier.padding(top= 20.dp).align(Alignment.CenterHorizontally),
             maxLines = 2,
             color = Color.White)
         Button(onClick = retryAction,
             colors = ButtonDefaults.buttonColors(backgroundColor = TextOrange),
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            modifier = Modifier.padding(top= 20.dp).align(Alignment.CenterHorizontally)) {
             Text(text = "Retry", color = Color.White)
         }
     }
