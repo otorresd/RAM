@@ -1,7 +1,9 @@
 package com.otorresd.ram.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -11,9 +13,12 @@ import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
@@ -47,8 +52,22 @@ fun CharacterDetail(id: String, viewModel: CharacterDetailViewModel = viewModel(
                     Column(modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 10.dp, bottom = 10.dp)) {
-                        Text(it.name, color = Color.White)
-                        Text(it.species, color = Color.White)
+                        Text(it.name, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 25.sp, maxLines = 2)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            val color = when(it.status){
+                                "Alive" -> Color.Green
+                                "Dead" -> Color.Red
+                                else -> Color.Gray
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .clip(CircleShape)
+                                    .background(color)
+                            )
+                            Spacer(modifier = Modifier.size(10.dp))
+                            Text("${it.status} - ${it.species}", color = Color.White)   
+                        }
                     }
                 }
             }
