@@ -68,6 +68,14 @@ fun CharacterDetail(id: String, viewModel: CharacterDetailViewModel = viewModel(
                             Spacer(modifier = Modifier.size(10.dp))
                             Text("${it.status} - ${it.species}", color = Color.White)   
                         }
+                        Spacer(modifier = Modifier.size(20.dp))
+                        Text("Last known location:", color = Color.Gray)
+                        Spacer(modifier = Modifier.size(5.dp))
+                        Text(it.location.name, color = Color.White, fontSize = 17.sp)
+                        Spacer(modifier = Modifier.size(20.dp))
+                        Text("First seen in:", color = Color.Gray)
+                        Spacer(modifier = Modifier.size(5.dp))
+                        Text(it.origin.name, color = Color.White, fontSize = 17.sp)
                     }
                 }
             }

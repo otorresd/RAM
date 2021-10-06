@@ -15,7 +15,9 @@ data class Character(val id: Int,
                      val status: String,
                      val species: String,
                      val type: String,
-                     val gender: String){
+                     val gender: String,
+                     val origin: Location,
+                     val location: Location){
 
     fun toCharacterE(): CharacterE{
         return CharacterE(id = id,
@@ -24,8 +26,12 @@ data class Character(val id: Int,
             status = status,
             species = species,
             type = type,
-            gender = gender)
+            gender = gender,
+            origin = origin,
+            location = location)
     }
 }
+
+data class Location(val name: String, val url: String)
 
 data class Info(val next: String?)
