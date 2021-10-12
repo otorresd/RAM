@@ -5,11 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -68,7 +71,22 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun RamApp(){
     val navController = rememberNavController()
-    RamNavHost(navController = navController)
+    var isHome by remember { mutableStateOf(true) }
+    navController.addOnDestinationChangedListener{ _, destination, _ ->
+        isHome = destination.route == Destinations.Characters.name
+    }
+    var title by remember { mutableStateOf(Destinations.Characters.name) }
+    Column {
+        TopAppBar(title = { Text(title) },
+            navigationIcon = {
+                if (!isHome)
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                    }
+                             },
+        backgroundColor = TextOrange, contentColor = Color.White)
+        RamNavHost(navController = navController){ title = it}
+    }
 }
 
 @ExperimentalMaterialApi
@@ -76,14 +94,16 @@ fun RamApp(){
 @ExperimentalAnimationApi
 @ExperimentalPagingApi
 @Composable
-fun RamNavHost(navController: NavHostController){
+fun RamNavHost(navController: NavHostController, updateTitle: (String) -> Unit){
     NavHost(navController = navController, startDestination = Destinations.Characters.name){
         composable(Destinations.Characters.name) {
+            updateTitle(Destinations.Characters.name)
             val charactersListViewModel = hiltViewModel<CharactersListViewModel>()
             CharactersListC(navController, charactersListViewModel)
         }
         composable("${Destinations.Detail.name}/{id}",
             arguments = listOf(navArgument("id") { type = NavType.StringType })) {
+            updateTitle(Destinations.Detail.name)
             val characterDetailViewModel = hiltViewModel<CharacterDetailViewModel>()
             CharacterDetail(it.arguments?.getString("id") ?: "", characterDetailViewModel)
         }
