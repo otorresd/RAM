@@ -77,12 +77,11 @@ fun RamApp(){
     var title by remember { mutableStateOf(Destinations.Characters.name) }
     Column {
         TopAppBar(title = { Text(title) },
-            navigationIcon = {
-                if (!isHome)
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
-                    }
-                             },
+            navigationIcon = if (!isHome){{
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                }
+            }} else null,
         backgroundColor = TextOrange, contentColor = Color.White)
         RamNavHost(navController = navController){ title = it}
     }
