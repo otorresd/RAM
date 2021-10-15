@@ -6,11 +6,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -31,6 +36,7 @@ import com.otorresd.ram.ui.screens.CharacterDetail
 import com.otorresd.ram.ui.screens.CharactersListC
 import com.otorresd.ram.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
@@ -75,16 +81,34 @@ fun RamApp(){
         isHome = destination.route == Destinations.Characters.name
     }
     var title by remember { mutableStateOf(Destinations.Characters.name) }
-    Column {
-        TopAppBar(title = { Text(title) },
-            navigationIcon = if (!isHome){{
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = null)
-                }
-            }} else null,
-        backgroundColor = TextOrange, contentColor = Color.White)
-        RamNavHost(navController = navController){ title = it}
-    }
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    ModalDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp),
+                onClick = { scope.launch { drawerState.close() } },
+                content = { Text("Close Drawer") }
+            )
+        },
+        content = {
+            Column {
+                TopAppBar(title = { Text(title) },
+                    navigationIcon = if (!isHome){{
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                        }
+                    }} else {{
+                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                            Icon(Icons.Filled.Menu, contentDescription = null)
+                        }
+                    }},
+                    backgroundColor = TextOrange, contentColor = Color.White)
+                RamNavHost(navController = navController){ title = it}
+            }
+        }
+    )
 }
 
 @ExperimentalMaterialApi

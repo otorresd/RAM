@@ -154,9 +154,9 @@ fun CharacterC(character: CharacterE, loadingImage: ImagePainter, errorImagePain
     var errorImage by remember { mutableStateOf(false) }
     Card(onClick = onClick,
         modifier = Modifier
-        .fillMaxWidth()
-        .height(250.dp)
-        .padding(start = 10.dp, end = 10.dp),
+            .fillMaxWidth()
+            .height(250.dp)
+            .padding(start = 10.dp, end = 10.dp),
         shape = CharacterCard.large,
         elevation = 5.dp,
         backgroundColor = CardBackground
@@ -281,13 +281,17 @@ fun NetworkConnectionError(retryAction: () -> Unit){
                 .fillMaxWidth()
                 .height(250.dp))
         Text(text = "Oops! Please connect your device to Internet",
-            modifier = Modifier.padding(top= 20.dp).align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .align(Alignment.CenterHorizontally),
             maxLines = 2,
             color = Color.White)
         Button(onClick = retryAction,
             colors = ButtonDefaults.buttonColors(backgroundColor = TextOrange),
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.padding(top= 20.dp).align(Alignment.CenterHorizontally)) {
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .align(Alignment.CenterHorizontally)) {
             Text(text = "Retry", color = Color.White)
         }
     }
