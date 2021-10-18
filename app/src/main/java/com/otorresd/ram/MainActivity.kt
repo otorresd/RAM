@@ -5,17 +5,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -86,11 +89,24 @@ fun RamApp(){
     ModalDrawer(
         drawerState = drawerState,
         drawerContent = {
-            Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp),
-                onClick = { scope.launch { drawerState.close() } },
-                content = { Text("Close Drawer") }
-            )
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .background(Background)){
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(Background, Color.White),
+                    border = BorderStroke(width= 0.dp, Color.Transparent),
+                    onClick = { scope.launch { drawerState.close() } },
+                    content = {
+                        Row(modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement= Arrangement.Start){
+                            Icon(Icons.Filled.Settings, "")
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text("Settings", fontSize = 18.sp)
+                        }
+                    }
+                )
+            }
         },
         content = {
             Column {
