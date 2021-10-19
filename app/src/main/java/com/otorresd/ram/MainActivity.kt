@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -16,6 +17,9 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,8 +33,10 @@ import androidx.paging.ExperimentalPagingApi
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import coil.imageLoader
 import com.otorresd.ram.model.CharacterDetailViewModel
 import com.otorresd.ram.model.CharactersListViewModel
 import com.otorresd.ram.ui.Destinations
@@ -91,6 +97,24 @@ fun RamApp(){
             Column(modifier = Modifier
                 .fillMaxSize()
                 .background(Background)){
+
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)) {
+                    val image = rememberImagePainter(R.drawable.space, LocalContext.current.imageLoader)
+                    Image(painter = painterResource(id = R.drawable.galaxy),
+                        contentDescription = "",
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight())
+                    Image(painter = image,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight())
+                }
+
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(Background, Color.White),
