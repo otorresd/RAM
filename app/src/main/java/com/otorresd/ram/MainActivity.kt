@@ -42,6 +42,7 @@ import com.otorresd.ram.model.CharactersListViewModel
 import com.otorresd.ram.ui.Destinations
 import com.otorresd.ram.ui.screens.CharacterDetail
 import com.otorresd.ram.ui.screens.CharactersListC
+import com.otorresd.ram.ui.screens.Settings
 import com.otorresd.ram.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -119,7 +120,12 @@ fun RamApp(){
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(Background, Color.White),
                     border = BorderStroke(width= 0.dp, Color.Transparent),
-                    onClick = { scope.launch { drawerState.close() } },
+                    onClick = {
+                        scope.launch {
+                            drawerState.close()
+                            navController.navigate(Destinations.Settings.name)
+                        }
+                              },
                     content = {
                         Row(modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement= Arrangement.Start){
@@ -167,6 +173,10 @@ fun RamNavHost(navController: NavHostController, updateTitle: (String) -> Unit){
             updateTitle(Destinations.Detail.name)
             val characterDetailViewModel = hiltViewModel<CharacterDetailViewModel>()
             CharacterDetail(it.arguments?.getString("id") ?: "", characterDetailViewModel)
+        }
+        composable(Destinations.Settings.name) {
+            updateTitle(Destinations.Settings.name)
+            Settings()
         }
     }
 }
