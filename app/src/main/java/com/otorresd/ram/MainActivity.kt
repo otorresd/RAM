@@ -117,7 +117,7 @@ fun RamApp(){
                 }
 
                 OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(top= 20.dp),
                     colors = ButtonDefaults.outlinedButtonColors(Background, Color.White),
                     border = BorderStroke(width= 0.dp, Color.Transparent),
                     onClick = {
