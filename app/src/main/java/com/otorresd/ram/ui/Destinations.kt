@@ -1,6 +1,6 @@
 package com.otorresd.ram.ui
 
-enum class Destinations(){
+enum class Destinations {
     Characters,
     Detail,
     Settings

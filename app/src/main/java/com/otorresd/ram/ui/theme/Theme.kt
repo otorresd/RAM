@@ -7,23 +7,25 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-    primary = Background,
-    primaryVariant = TextOrange,
-    secondary = Teal200,
-    background = Background,
-    onPrimary = Background
+    primary = LightBackground,
+    primaryVariant = PrimaryOrange,
+    secondary = PrimaryOrange,
+    background = DarkBackground,
+    secondaryVariant = PrimaryOrange,
+    surface = LightBackground
 )
 
 private val LightColorPalette = lightColors(
-    primary = Background,
-    primaryVariant = TextOrange,
-    secondary = Teal200,
-    background = Background,
-    onPrimary = Background
+    primary = DarkBackground,
+    primaryVariant = PrimaryOrange,
+    secondary = PrimaryOrange,
+    background = LightBackground,
+    secondaryVariant = PrimaryOrange,
+    surface = DarkBackground
 )
 
 @Composable
-fun RAMTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+fun RAMTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

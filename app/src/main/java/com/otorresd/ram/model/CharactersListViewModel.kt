@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @ExperimentalPagingApi
 @HiltViewModel
-class CharactersListViewModel @Inject internal constructor(private val appDatabase: AppDatabase, val remoteMediator: CharactersRemoteMediator): ViewModel() {
+class CharactersListViewModel @Inject internal constructor(appDatabase: AppDatabase, remoteMediator: CharactersRemoteMediator): ViewModel() {
     val charactersDao = appDatabase.characterDao()
     val pager = Pager(
         config = PagingConfig(pageSize = 20),

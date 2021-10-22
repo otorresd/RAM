@@ -68,7 +68,7 @@ fun CharactersListC(navHostController: NavHostController, charactersViewModel: C
             state = state,
             onRefresh = { lazyPagingItems.refresh() },
             indicator = {state, trigger ->
-                SwipeRefreshIndicator(state = state, refreshTriggerDistance = trigger, backgroundColor = TextOrange, contentColor = Color.White)
+                SwipeRefreshIndicator(state = state, refreshTriggerDistance = trigger, backgroundColor = PrimaryOrange, contentColor = Color.White)
             }
         ) {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -76,7 +76,7 @@ fun CharactersListC(navHostController: NavHostController, charactersViewModel: C
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .background(Background)) {
+                    .background(DarkBackground)) {
                 items(lazyPagingItems, key = { it.id }) { character ->
                     character?.let { CharacterC(character = character, loadingImage = loadingImage, errorImagePainter = errorImagePainter){navHostController.navigate(
                         "${Destinations.Detail.name}/${character.id}")} } ?: CardHolderC()
@@ -116,7 +116,7 @@ fun CharactersListC(navHostController: NavHostController, charactersViewModel: C
                     listState.scrollToItem(0)
                 }
             }, contentColor = Color.White,
-                backgroundColor = TextOrange,
+                backgroundColor = PrimaryOrange,
                 elevation = FloatingActionButtonDefaults.elevation(8.dp),
                 modifier = Modifier.size(40.dp)) {
                 Icon(Icons.Filled.KeyboardArrowUp, contentDescription = "Localized description")
@@ -204,7 +204,7 @@ fun CharacterC(character: CharacterE, loadingImage: ImagePainter, errorImagePain
                 FloatingActionButton(onClick = {
                     errorImage = false
                 }, contentColor = Color.White,
-                    backgroundColor = TextOrange,
+                    backgroundColor = PrimaryOrange,
                     modifier = Modifier
                         .size(40.dp)
                         .align(Alignment.Center)) {
@@ -223,7 +223,7 @@ fun CharacterC(character: CharacterE, loadingImage: ImagePainter, errorImagePain
                     fontWeight = FontWeight.Bold,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    color = TextOrange,
+                    color = PrimaryOrange,
                     modifier = Modifier
                         .padding(start = 15.dp, bottom = 5.dp)
                         .align(Alignment.CenterVertically))
@@ -239,7 +239,7 @@ fun AppendProgress(){
         verticalArrangement = Arrangement.Center) {
 
         Card(shape = RoundedCornerShape(50),
-            backgroundColor = TextOrange,
+            backgroundColor = PrimaryOrange,
             elevation = 8.dp,
             modifier = Modifier
                 .padding(top = 10.dp, bottom = 10.dp)
@@ -257,7 +257,7 @@ fun AppendRetryButton(retryAction: () -> Unit){
         verticalArrangement = Arrangement.Center) {
 
         Button(onClick = retryAction,
-            colors = ButtonDefaults.buttonColors(backgroundColor = TextOrange),
+            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryOrange),
             shape = RoundedCornerShape(50),
             modifier = Modifier
                 .padding(top = 10.dp, bottom = 10.dp)
@@ -287,7 +287,7 @@ fun NetworkConnectionError(retryAction: () -> Unit){
             maxLines = 2,
             color = Color.White)
         Button(onClick = retryAction,
-            colors = ButtonDefaults.buttonColors(backgroundColor = TextOrange),
+            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryOrange),
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .padding(top = 20.dp)

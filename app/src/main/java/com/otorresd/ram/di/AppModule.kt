@@ -3,6 +3,7 @@ package com.otorresd.ram.di
 import android.app.Application
 import androidx.room.Room
 import com.otorresd.ram.room.AppDatabase
+import com.otorresd.ram.util.DataStoreManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,10 +11,8 @@ import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
-import java.security.SecureRandom
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSession
 
 @Module
@@ -48,6 +47,12 @@ object AppModule {
                 }
             }
         }
+    }
+
+    @Singleton
+    @Provides
+    fun provideDataStoreManager(application: Application): DataStoreManager {
+        return DataStoreManager(application)
     }
 }
 

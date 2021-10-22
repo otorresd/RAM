@@ -140,7 +140,7 @@ fun ImageCoil(imageUrl: String){
             FloatingActionButton(onClick = {
                 errorImage = false
             }, contentColor = Color.White,
-                backgroundColor = TextOrange,
+                backgroundColor = PrimaryOrange,
                 modifier = Modifier
                     .size(40.dp)
                     .align(Alignment.Center)) {

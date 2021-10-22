@@ -1,37 +1,32 @@
 package com.otorresd.ram.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Switch
-import androidx.compose.material.SwitchDefaults
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.otorresd.ram.ui.theme.Background
-import com.otorresd.ram.ui.theme.TextOrange
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.otorresd.ram.model.SettingsViewModel
 
-@Preview
 @Composable
-fun Settings(){
-    val checkedState = remember { mutableStateOf(true) }
+fun Settings(settingsViewModel: SettingsViewModel = viewModel()){
+    val checkedState by settingsViewModel.isDarkMode.collectAsState(isSystemInDarkTheme())
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(Background),) {
+        .background(MaterialTheme.colors.background)) {
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp),
             horizontalArrangement= Arrangement.SpaceAround){
-            Text("Dark mode", fontSize = 18.sp, color = Color.White)
+            Text("Dark mode", fontSize = 18.sp)
             Switch(
-                checked = checkedState.value,
-                onCheckedChange = { checkedState.value = it },
-                colors = SwitchDefaults.colors(checkedThumbColor = TextOrange)
+                checked = checkedState,
+                onCheckedChange = {
+                    settingsViewModel.setDarkMode(it)
+                                  }
             )
         }
     }

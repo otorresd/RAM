@@ -1,6 +1,5 @@
 package com.otorresd.ram.di
 
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.ExperimentalPagingApi
 import com.otorresd.ram.paging.CharactersRemoteMediator
 import com.otorresd.ram.room.AppDatabase

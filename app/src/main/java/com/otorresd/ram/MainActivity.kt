@@ -4,10 +4,12 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -39,6 +41,7 @@ import coil.decode.ImageDecoderDecoder
 import coil.imageLoader
 import com.otorresd.ram.model.CharacterDetailViewModel
 import com.otorresd.ram.model.CharactersListViewModel
+import com.otorresd.ram.model.SettingsViewModel
 import com.otorresd.ram.ui.Destinations
 import com.otorresd.ram.ui.screens.CharacterDetail
 import com.otorresd.ram.ui.screens.CharactersListC
@@ -53,7 +56,7 @@ import kotlinx.coroutines.launch
 @ExperimentalAnimationApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
+    private val settingsViewModel: SettingsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_RAM)
         super.onCreate(savedInstanceState)
@@ -68,7 +71,8 @@ class MainActivity : ComponentActivity() {
             .build()
         Coil.setImageLoader(imageLoader)
         setContent {
-            RAMTheme {
+            val isDarkMode by settingsViewModel.isDarkMode.collectAsState(isSystemInDarkTheme())
+            RAMTheme(darkTheme = isDarkMode) {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     RamApp()
@@ -97,7 +101,7 @@ fun RamApp(){
         drawerContent = {
             Column(modifier = Modifier
                 .fillMaxSize()
-                .background(Background)){
+                .background(DarkBackground)){
 
                 Box(modifier = Modifier
                     .fillMaxWidth()
@@ -117,8 +121,10 @@ fun RamApp(){
                 }
 
                 OutlinedButton(
-                    modifier = Modifier.fillMaxWidth().padding(top= 20.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(Background, Color.White),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(DarkBackground, Color.White),
                     border = BorderStroke(width= 0.dp, Color.Transparent),
                     onClick = {
                         scope.launch {
@@ -149,7 +155,7 @@ fun RamApp(){
                             Icon(Icons.Filled.Menu, contentDescription = null)
                         }
                     }},
-                    backgroundColor = TextOrange, contentColor = Color.White)
+                    backgroundColor = PrimaryOrange, contentColor = Color.White)
                 RamNavHost(navController = navController){ title = it}
             }
         }
@@ -176,7 +182,8 @@ fun RamNavHost(navController: NavHostController, updateTitle: (String) -> Unit){
         }
         composable(Destinations.Settings.name) {
             updateTitle(Destinations.Settings.name)
-            Settings()
+            val settingsViewModel = hiltViewModel<SettingsViewModel>()
+            Settings(settingsViewModel)
         }
     }
 }

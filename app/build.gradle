@@ -109,4 +109,7 @@ dependencies {
 
     //SwipeRefresh for Compose
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.20.0'
+
+    //DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 }

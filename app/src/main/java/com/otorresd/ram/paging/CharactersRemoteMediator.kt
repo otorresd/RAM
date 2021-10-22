@@ -13,7 +13,6 @@ import com.otorresd.ram.room.entities.CharacterE
 import io.ktor.client.*
 import io.ktor.client.request.*
 import java.io.IOException
-import javax.net.ssl.SSLException
 
 @ExperimentalPagingApi
 class CharactersRemoteMediator(private val appDatabase: AppDatabase, private val ktorClient: HttpClient): RemoteMediator<Int, CharacterE>() {
