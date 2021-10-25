@@ -39,6 +39,7 @@ import coil.compose.rememberImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.imageLoader
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.otorresd.ram.model.CharacterDetailViewModel
 import com.otorresd.ram.model.CharactersListViewModel
 import com.otorresd.ram.model.SettingsViewModel
@@ -72,7 +73,12 @@ class MainActivity : ComponentActivity() {
         Coil.setImageLoader(imageLoader)
         setContent {
             val isDarkMode by settingsViewModel.isDarkMode.collectAsState(isSystemInDarkTheme())
+            val systemUiController = rememberSystemUiController()
             RAMTheme(darkTheme = isDarkMode) {
+                systemUiController.setSystemBarsColor(
+                    color = MaterialTheme.colors.topBarBackground,
+                    darkIcons = false
+                )
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     RamApp()
@@ -155,7 +161,7 @@ fun RamApp(){
                             Icon(Icons.Filled.Menu, contentDescription = null)
                         }
                     }},
-                    backgroundColor = PrimaryOrange, contentColor = Color.White)
+                    backgroundColor = MaterialTheme.colors.topBarBackground, contentColor = Color.White)
                 RamNavHost(navController = navController){ title = it}
             }
         }

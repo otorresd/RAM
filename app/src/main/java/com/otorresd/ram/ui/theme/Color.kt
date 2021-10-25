@@ -15,3 +15,6 @@ val LightBackground = Color.White
 // Common
 val Colors.cardBackground: Color
     get() = if (isLight) LightBackground else DarkCardBackground
+
+val Colors.topBarBackground: Color
+    get() = if(isLight) DarkBackground else PrimaryOrange
