@@ -76,7 +76,7 @@ fun CharactersListC(navHostController: NavHostController, charactersViewModel: C
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .background(DarkBackground)) {
+                    .background(MaterialTheme.colors.background)) {
                 items(lazyPagingItems, key = { it.id }) { character ->
                     character?.let { CharacterC(character = character, loadingImage = loadingImage, errorImagePainter = errorImagePainter){navHostController.navigate(
                         "${Destinations.Detail.name}/${character.id}")} } ?: CardHolderC()
@@ -159,7 +159,7 @@ fun CharacterC(character: CharacterE, loadingImage: ImagePainter, errorImagePain
             .padding(start = 10.dp, end = 10.dp),
         shape = CharacterCard.large,
         elevation = 5.dp,
-        backgroundColor = DarkCardBackground
+        backgroundColor = MaterialTheme.colors.cardBackground
     ) {
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -284,8 +284,7 @@ fun NetworkConnectionError(retryAction: () -> Unit){
             modifier = Modifier
                 .padding(top = 20.dp)
                 .align(Alignment.CenterHorizontally),
-            maxLines = 2,
-            color = Color.White)
+            maxLines = 2)
         Button(onClick = retryAction,
             colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryOrange),
             shape = RoundedCornerShape(10.dp),

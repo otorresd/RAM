@@ -101,7 +101,7 @@ fun RamApp(){
         drawerContent = {
             Column(modifier = Modifier
                 .fillMaxSize()
-                .background(DarkBackground)){
+                .background(MaterialTheme.colors.background)){
 
                 Box(modifier = Modifier
                     .fillMaxWidth()
@@ -124,7 +124,7 @@ fun RamApp(){
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 20.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(DarkBackground, Color.White),
+                    colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colors.background),
                     border = BorderStroke(width= 0.dp, Color.Transparent),
                     onClick = {
                         scope.launch {
