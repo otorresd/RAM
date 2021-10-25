@@ -4,10 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.*
@@ -44,7 +41,7 @@ fun CharacterDetail(id: String, viewModel: CharacterDetailViewModel = viewModel(
                     .align(Alignment.Center),
                 shape = CharacterCard.large,
                 elevation = 5.dp,
-                backgroundColor = CardBackground
+                backgroundColor = MaterialTheme.colors.cardBackground
             ) {
                 Column(modifier = Modifier
                     .fillMaxWidth()) {
@@ -52,7 +49,7 @@ fun CharacterDetail(id: String, viewModel: CharacterDetailViewModel = viewModel(
                     Column(modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 10.dp, bottom = 10.dp)) {
-                        Text(it.name, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 25.sp, maxLines = 2)
+                        Text(it.name, fontWeight = FontWeight.Bold, fontSize = 25.sp, maxLines = 2)
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             val color = when(it.status){
                                 "Alive" -> Color.Green
@@ -66,16 +63,16 @@ fun CharacterDetail(id: String, viewModel: CharacterDetailViewModel = viewModel(
                                     .background(color)
                             )
                             Spacer(modifier = Modifier.size(10.dp))
-                            Text("${it.status} - ${it.species}", color = Color.White)   
+                            Text("${it.status} - ${it.species}")
                         }
                         Spacer(modifier = Modifier.size(20.dp))
                         Text("Last known location:", color = Color.Gray)
                         Spacer(modifier = Modifier.size(5.dp))
-                        Text(it.location.name, color = Color.White, fontSize = 17.sp)
+                        Text(it.location.name, fontSize = 17.sp)
                         Spacer(modifier = Modifier.size(20.dp))
                         Text("First seen in:", color = Color.Gray)
                         Spacer(modifier = Modifier.size(5.dp))
-                        Text(it.origin.name, color = Color.White, fontSize = 17.sp)
+                        Text(it.origin.name, fontSize = 17.sp)
                     }
                 }
             }

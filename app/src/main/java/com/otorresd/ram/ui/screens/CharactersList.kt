@@ -159,7 +159,7 @@ fun CharacterC(character: CharacterE, loadingImage: ImagePainter, errorImagePain
             .padding(start = 10.dp, end = 10.dp),
         shape = CharacterCard.large,
         elevation = 5.dp,
-        backgroundColor = CardBackground
+        backgroundColor = DarkCardBackground
     ) {
         Box(modifier = Modifier
             .fillMaxWidth()
